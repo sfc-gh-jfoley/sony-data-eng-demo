@@ -1,0 +1,96 @@
+version: 2
+
+sources:
+  - name: gold
+    database: SONY_DE
+    schema: GOLD
+    tables:
+      - name: dt_dim_fans
+        description: Dynamic Table - Fan dimension
+        columns:
+          - name: fan_key
+            tests:
+              - unique
+              - not_null
+          - name: fan_id
+            tests:
+              - unique
+              - not_null
+          - name: account_type
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['VERIFIED', 'GUEST']
+          - name: email_hash
+            description: SHA256 hash of email (null for GUEST accounts)
+          - name: country_code
+            tests:
+              - not_null
+
+      - name: dt_dim_titles
+        description: Dynamic Table - Title dimension
+        columns:
+          - name: title_key
+            tests:
+              - unique
+              - not_null
+          - name: title_id
+            tests:
+              - unique
+              - not_null
+          - name: title_name
+            tests:
+              - not_null
+          - name: release_year
+            tests:
+              - not_null
+          - name: imdb_score
+            tests:
+              - not_null
+
+      - name: dt_fact_daily_performance
+        description: Dynamic Table - Daily performance fact
+        columns:
+          - name: performance_key
+            tests:
+              - unique
+              - not_null
+          - name: title_id
+            tests:
+              - not_null
+              - relationships:
+                  to: source('gold', 'dt_dim_titles')
+                  field: title_id
+          - name: report_date
+            tests:
+              - not_null
+          - name: total_gross_usd
+            tests:
+              - not_null
+          - name: theater_count
+            tests:
+              - not_null
+
+  - name: platinum
+    database: SONY_DE
+    schema: PLATINUM
+    tables:
+      - name: agg_fan_lifetime_value
+        description: Dynamic Table - Fan lifetime value aggregation
+        columns:
+          - name: region
+            tests:
+              - not_null
+          - name: fan_count
+            tests:
+              - not_null
+
+      - name: agg_franchise_performance
+        description: Dynamic Table - Franchise performance aggregation
+        columns:
+          - name: franchise
+            tests:
+              - not_null
+          - name: total_gross_usd
+            tests:
+              - not_null

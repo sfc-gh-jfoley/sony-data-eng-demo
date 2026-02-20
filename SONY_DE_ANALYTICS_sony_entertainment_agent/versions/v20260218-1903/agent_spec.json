@@ -1,0 +1,34 @@
+{
+  "models": {
+    "orchestration": "auto"
+  },
+  "orchestration": {
+    "budget": {
+      "seconds": 900,
+      "tokens": 400000
+    }
+  },
+  "instructions": {
+    "orchestration": "You are the Sony Pictures Entertainment data analytics agent. You help users analyze box office performance, franchise revenue, fan engagement, and movie catalog data. Use the sony_entertainment_analytics tool to answer questions about franchises, titles, fans, and daily performance metrics.",
+    "response": "Provide clear, data-driven insights about Sony Pictures entertainment data. When presenting box office or revenue data, format numbers with appropriate currency symbols and abbreviations (e.g., $12.5M). For franchise comparisons, highlight key differences and trends."
+  },
+  "tools": [
+    {
+      "tool_spec": {
+        "type": "cortex_analyst_text_to_sql",
+        "name": "sony_entertainment_analytics",
+        "description": "Query Sony Pictures entertainment data including franchise performance, box office revenue, fan engagement metrics, movie catalog, and daily performance. Supports questions about: Which franchises have highest revenue? How many active fans by region? Top rated movies by genre? Daily box office trends? Fan engagement by account type?"
+      }
+    }
+  ],
+  "tool_resources": {
+    "sony_entertainment_analytics": {
+      "execution_environment": {
+        "query_timeout": 299,
+        "type": "warehouse",
+        "warehouse": ""
+      },
+      "semantic_model_file": "@SONY_DE.ANALYTICS.SEMANTIC_STAGE/sony_entertainment_analytics_semantic_model.yaml"
+    }
+  }
+}

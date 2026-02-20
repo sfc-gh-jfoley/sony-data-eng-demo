@@ -1,0 +1,14 @@
+definition_version: 2
+entities:
+  sony_pipeline_monitor:
+    type: streamlit
+    identifier:
+      name: SONY_PIPELINE_MONITOR
+    title: "Sony DE Pipeline Monitor"
+    query_warehouse: COMPUTE_WH
+    main_file: app_sis.py
+    pages_dir: null
+    stage: SONY_DE.GOVERNANCE.STREAMLIT_STAGE
+    artifacts:
+      - app_sis.py
+      - environment.yml

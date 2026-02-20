@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: fact_daily_performance
+    description: Daily performance fact table combining box office and fan metrics
+    columns:
+      - name: performance_key
+        description: Surrogate key (MD5 hash of title_id + report_date)
+        tests:
+          - unique
+          - not_null
+      - name: title_id
+        description: Foreign key to dim_titles
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_titles')
+              field: title_id
+      - name: report_date
+        tests:
+          - not_null
+      - name: total_gross_usd
+        tests:
+          - not_null
+      - name: theater_count
+        tests:
+          - not_null

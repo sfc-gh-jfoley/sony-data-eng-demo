@@ -1,0 +1,15 @@
+[project]
+name = "sony-spe"
+version = "0.1.0"
+description = "Sony Pictures Entertainment Data Engineering Demo - dbt project"
+requires-python = ">=3.11"
+dependencies = [
+    "dbt-snowflake>=1.8.0",
+    "dbt-core>=1.8.0",
+]
+
+[dependency-groups]
+dev = [
+    "sqlfluff>=3.0.0",
+    "sqlfluff-templater-dbt>=3.0.0",
+]

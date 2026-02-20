@@ -1,0 +1,519 @@
+name: sony_entertainment_analytics
+description: Sony Pictures Entertainment data analytics semantic model covering franchise performance, box office metrics, fan engagement, and title catalog data
+
+tables:
+  - name: franchise_performance
+    description: Aggregated franchise performance metrics including box office revenue, ticket sales, and streaming data
+    base_table:
+      database: SONY_DE
+      schema: PLATINUM
+      table: AGG_FRANCHISE_PERFORMANCE
+    dimensions:
+      - name: franchise
+        synonyms:
+          - movie franchise
+          - film series
+          - franchise name
+        description: Name of the movie franchise (e.g., Spider-Man, Ghostbusters, Jumanji)
+        expr: FRANCHISE
+        data_type: VARCHAR
+        sample_values:
+          - Spider-Man
+          - Ghostbusters
+          - Jumanji
+      - name: genre
+        synonyms:
+          - movie genre
+          - film category
+          - type
+        description: Primary genre of the franchise
+        expr: GENRE
+        data_type: VARCHAR
+        sample_values:
+          - Action
+          - Comedy
+          - Horror
+      - name: first_report_date
+        description: First date of box office reporting for this franchise
+        expr: FIRST_REPORT_DATE
+        data_type: DATE
+      - name: last_report_date
+        description: Most recent date of box office reporting
+        expr: LAST_REPORT_DATE
+        data_type: DATE
+    time_dimensions:
+      - name: refreshed_at
+        description: Timestamp when the aggregate was last refreshed
+        expr: REFRESHED_AT
+        data_type: TIMESTAMP
+    facts:
+      - name: title_count
+        synonyms:
+          - number of titles
+          - movie count
+        description: Number of titles in the franchise
+        expr: TITLE_COUNT
+        data_type: NUMBER
+      - name: total_tickets
+        synonyms:
+          - tickets sold
+          - total ticket sales
+        description: Total number of tickets sold across all titles
+        expr: TOTAL_TICKETS
+        data_type: NUMBER
+      - name: total_gross_usd
+        synonyms:
+          - total revenue
+          - box office revenue
+          - gross revenue
+        description: Total gross box office revenue in USD
+        expr: TOTAL_GROSS_USD
+        data_type: NUMBER
+      - name: avg_ticket_price
+        synonyms:
+          - average ticket price
+          - ticket price
+        description: Average ticket price in USD
+        expr: AVG_TICKET_PRICE
+        data_type: NUMBER
+      - name: total_streams
+        synonyms:
+          - streaming views
+          - stream count
+        description: Total number of streaming views
+        expr: TOTAL_STREAMS
+        data_type: NUMBER
+      - name: total_unique_fans
+        synonyms:
+          - unique viewers
+          - fan count
+        description: Total number of unique fans engaged with the franchise
+        expr: TOTAL_UNIQUE_FANS
+        data_type: NUMBER
+
+  - name: fan_lifetime_value
+    description: Aggregated fan engagement and lifetime value metrics by region and account type
+    base_table:
+      database: SONY_DE
+      schema: PLATINUM
+      table: AGG_FAN_LIFETIME_VALUE
+    dimensions:
+      - name: region
+        synonyms:
+          - geographic region
+          - area
+        description: Geographic region of the fans
+        expr: REGION
+        data_type: VARCHAR
+        sample_values:
+          - North America
+          - Europe
+          - Asia Pacific
+      - name: country_code
+        synonyms:
+          - country
+        description: ISO country code
+        expr: COUNTRY_CODE
+        data_type: VARCHAR
+        sample_values:
+          - US
+          - UK
+          - JP
+      - name: account_type
+        synonyms:
+          - fan type
+          - user type
+        description: Type of fan account (VERIFIED or GUEST)
+        expr: ACCOUNT_TYPE
+        data_type: VARCHAR
+        sample_values:
+          - VERIFIED
+          - GUEST
+      - name: top_device
+        synonyms:
+          - preferred device
+          - device type
+        description: Most common device used by fans in this segment
+        expr: TOP_DEVICE
+        data_type: VARCHAR
+    time_dimensions:
+      - name: refreshed_at
+        description: Timestamp when the aggregate was last refreshed
+        expr: REFRESHED_AT
+        data_type: TIMESTAMP
+    facts:
+      - name: fan_count
+        synonyms:
+          - number of fans
+          - total fans
+        description: Total number of fans in this segment
+        expr: FAN_COUNT
+        data_type: NUMBER
+      - name: avg_interactions
+        synonyms:
+          - average engagement
+          - interactions per fan
+        description: Average number of interactions per fan
+        expr: AVG_INTERACTIONS
+        data_type: NUMBER
+      - name: avg_titles_engaged
+        synonyms:
+          - titles watched
+          - content engagement
+        description: Average number of titles each fan has engaged with
+        expr: AVG_TITLES_ENGAGED
+        data_type: NUMBER
+      - name: avg_active_days
+        synonyms:
+          - days active
+          - engagement duration
+        description: Average number of days fans have been active
+        expr: AVG_ACTIVE_DAYS
+        data_type: NUMBER
+      - name: active_last_30_days
+        synonyms:
+          - monthly active
+          - MAU
+        description: Number of fans active in the last 30 days
+        expr: ACTIVE_LAST_30_DAYS
+        data_type: NUMBER
+      - name: active_last_7_days
+        synonyms:
+          - weekly active
+          - WAU
+        description: Number of fans active in the last 7 days
+        expr: ACTIVE_LAST_7_DAYS
+        data_type: NUMBER
+
+  - name: dim_titles
+    description: Movie title dimension with metadata including franchise, genre, ratings, and budget
+    base_table:
+      database: SONY_DE
+      schema: GOLD
+      table: DT_DIM_TITLES
+    primary_key:
+      columns:
+        - title_id
+    dimensions:
+      - name: title_key
+        description: Surrogate key for the title
+        expr: TITLE_KEY
+        data_type: VARCHAR
+      - name: title_id
+        description: Natural key for the title
+        expr: TITLE_ID
+        data_type: VARCHAR
+      - name: title_name
+        synonyms:
+          - movie name
+          - film name
+          - movie title
+        description: Name of the movie
+        expr: TITLE_NAME
+        data_type: VARCHAR
+      - name: franchise
+        synonyms:
+          - movie franchise
+          - series
+        description: Franchise the movie belongs to
+        expr: FRANCHISE
+        data_type: VARCHAR
+      - name: release_year
+        synonyms:
+          - year released
+          - year
+        description: Year the movie was released
+        expr: RELEASE_YEAR
+        data_type: NUMBER
+      - name: genre
+        synonyms:
+          - movie genre
+          - category
+        description: Primary genre of the movie
+        expr: GENRE
+        data_type: VARCHAR
+      - name: sub_genre
+        synonyms:
+          - secondary genre
+        description: Secondary genre classification
+        expr: SUB_GENRE
+        data_type: VARCHAR
+      - name: rating
+        synonyms:
+          - mpaa rating
+          - content rating
+        description: Content rating (G, PG, PG-13, R)
+        expr: RATING
+        data_type: VARCHAR
+        sample_values:
+          - G
+          - PG
+          - PG-13
+          - R
+      - name: production_status
+        description: Current production status
+        expr: PRODUCTION_STATUS
+        data_type: VARCHAR
+      - name: studio
+        description: Production studio
+        expr: STUDIO
+        data_type: VARCHAR
+      - name: director
+        description: Movie director
+        expr: DIRECTOR
+        data_type: VARCHAR
+    facts:
+      - name: runtime_minutes
+        synonyms:
+          - duration
+          - length
+          - runtime
+        description: Movie runtime in minutes
+        expr: RUNTIME_MINUTES
+        data_type: NUMBER
+      - name: imdb_score
+        synonyms:
+          - imdb rating
+          - rating score
+        description: IMDb rating score (0-10)
+        expr: IMDB_SCORE
+        data_type: FLOAT
+      - name: budget_usd
+        synonyms:
+          - production budget
+          - movie budget
+        description: Production budget in USD
+        expr: BUDGET_USD
+        data_type: NUMBER
+
+  - name: dim_fans
+    description: Fan dimension with demographic and engagement data
+    base_table:
+      database: SONY_DE
+      schema: GOLD
+      table: DT_DIM_FANS
+    dimensions:
+      - name: fan_key
+        description: Surrogate key for the fan
+        expr: FAN_KEY
+        data_type: VARCHAR
+      - name: fan_id
+        description: Natural key for the fan
+        expr: FAN_ID
+        data_type: VARCHAR
+      - name: account_type
+        synonyms:
+          - user type
+          - fan type
+        description: Type of account (VERIFIED or GUEST)
+        expr: ACCOUNT_TYPE
+        data_type: VARCHAR
+      - name: region
+        synonyms:
+          - geographic region
+        description: Fan's geographic region
+        expr: REGION
+        data_type: VARCHAR
+      - name: country_code
+        synonyms:
+          - country
+        description: Fan's country code
+        expr: COUNTRY_CODE
+        data_type: VARCHAR
+      - name: preferred_device
+        synonyms:
+          - device
+          - device type
+        description: Fan's preferred viewing device
+        expr: PREFERRED_DEVICE
+        data_type: VARCHAR
+    time_dimensions:
+      - name: signup_date
+        synonyms:
+          - registration date
+          - join date
+        description: Date the fan signed up
+        expr: SIGNUP_DATE
+        data_type: DATE
+      - name: last_active_date
+        synonyms:
+          - last seen
+          - last activity
+        description: Date of fan's last activity
+        expr: LAST_ACTIVE_DATE
+        data_type: DATE
+    facts:
+      - name: lifetime_interactions
+        synonyms:
+          - total interactions
+          - engagement count
+        description: Total number of interactions by the fan
+        expr: LIFETIME_INTERACTIONS
+        data_type: NUMBER
+      - name: titles_engaged
+        synonyms:
+          - titles watched
+          - content consumed
+        description: Number of titles the fan has engaged with
+        expr: TITLES_ENGAGED
+        data_type: NUMBER
+
+  - name: fact_daily_performance
+    description: Daily fact table with box office and streaming performance metrics by title and region
+    base_table:
+      database: SONY_DE
+      schema: GOLD
+      table: DT_FACT_DAILY_PERFORMANCE
+    dimensions:
+      - name: performance_key
+        description: Surrogate key for the performance record
+        expr: PERFORMANCE_KEY
+        data_type: VARCHAR
+      - name: title_id
+        description: Foreign key to dim_titles
+        expr: TITLE_ID
+        data_type: VARCHAR
+      - name: region
+        synonyms:
+          - market
+          - territory
+        description: Geographic region for the performance data
+        expr: REGION
+        data_type: VARCHAR
+    time_dimensions:
+      - name: report_date
+        synonyms:
+          - date
+          - performance date
+        description: Date of the performance metrics
+        expr: REPORT_DATE
+        data_type: DATE
+    facts:
+      - name: total_tickets_sold
+        synonyms:
+          - tickets
+          - ticket sales
+        description: Total tickets sold on this date
+        expr: TOTAL_TICKETS_SOLD
+        data_type: NUMBER
+      - name: total_gross_usd
+        synonyms:
+          - revenue
+          - gross revenue
+          - box office
+        description: Total gross revenue in USD
+        expr: TOTAL_GROSS_USD
+        data_type: NUMBER
+      - name: theater_count
+        synonyms:
+          - theaters
+          - number of theaters
+        description: Number of theaters showing the title
+        expr: THEATER_COUNT
+        data_type: NUMBER
+      - name: screen_count
+        synonyms:
+          - screens
+          - number of screens
+        description: Number of screens showing the title
+        expr: SCREEN_COUNT
+        data_type: NUMBER
+      - name: avg_ticket_price_usd
+        synonyms:
+          - ticket price
+          - average price
+        description: Average ticket price in USD
+        expr: AVG_TICKET_PRICE_USD
+        data_type: NUMBER
+      - name: stream_count
+        synonyms:
+          - streams
+          - streaming views
+        description: Number of streaming views
+        expr: STREAM_COUNT
+        data_type: NUMBER
+      - name: unique_fans
+        synonyms:
+          - unique viewers
+          - distinct fans
+        description: Number of unique fans engaging with the title
+        expr: UNIQUE_FANS
+        data_type: NUMBER
+
+relationships:
+  - name: performance_to_titles
+    left_table: fact_daily_performance
+    right_table: dim_titles
+    relationship_columns:
+      - left_column: title_id
+        right_column: title_id
+    join_type: left_outer
+    relationship_type: many_to_one
+
+verified_queries:
+  - name: franchise_revenue_ranking
+    question: Which franchises have the highest total box office revenue?
+    sql: |
+      SELECT 
+        franchise,
+        total_gross_usd as total_revenue,
+        total_tickets,
+        title_count
+      FROM SONY_DE.PLATINUM.AGG_FRANCHISE_PERFORMANCE
+      ORDER BY total_gross_usd DESC
+    verified_at: 1739836800
+    verified_by: cortex_code
+
+  - name: active_fans_by_region
+    question: How many active fans do we have in each region in the last 30 days?
+    sql: |
+      SELECT 
+        region,
+        SUM(active_last_30_days) as monthly_active_fans,
+        SUM(fan_count) as total_fans
+      FROM SONY_DE.PLATINUM.AGG_FAN_LIFETIME_VALUE
+      GROUP BY region
+      ORDER BY monthly_active_fans DESC
+    verified_at: 1739836800
+    verified_by: cortex_code
+
+  - name: top_rated_titles_by_genre
+    question: What are the top rated movies by genre?
+    sql: |
+      SELECT 
+        genre,
+        title_name,
+        imdb_score,
+        release_year
+      FROM SONY_DE.GOLD.DT_DIM_TITLES
+      WHERE imdb_score IS NOT NULL
+      ORDER BY genre, imdb_score DESC
+    verified_at: 1739836800
+    verified_by: cortex_code
+
+  - name: daily_box_office_trend
+    question: What is the daily box office revenue trend for the last 30 days?
+    sql: |
+      SELECT 
+        report_date,
+        SUM(total_gross_usd) as daily_revenue,
+        SUM(total_tickets_sold) as daily_tickets
+      FROM SONY_DE.GOLD.DT_FACT_DAILY_PERFORMANCE
+      WHERE report_date >= DATEADD('day', -30, CURRENT_DATE())
+      GROUP BY report_date
+      ORDER BY report_date
+    verified_at: 1739836800
+    verified_by: cortex_code
+
+  - name: fan_engagement_by_account_type
+    question: How does fan engagement differ between verified and guest accounts?
+    sql: |
+      SELECT 
+        account_type,
+        SUM(fan_count) as total_fans,
+        AVG(avg_interactions) as avg_engagement,
+        AVG(avg_titles_engaged) as avg_content_consumed
+      FROM SONY_DE.PLATINUM.AGG_FAN_LIFETIME_VALUE
+      GROUP BY account_type
+    verified_at: 1739836800
+    verified_by: cortex_code

@@ -1,0 +1,62 @@
+{
+  "name": "sony_entertainment_analytics",
+  "sql_source": {
+    "queries": [
+      {
+        "sql_text": "SELECT franchise, genre, total_gross_usd, total_tickets FROM SONY_DE.PLATINUM.AGG_FRANCHISE_PERFORMANCE WHERE franchise = 'Spider-Man'"
+      },
+      {
+        "sql_text": "SELECT region, country_code, fan_count, active_last_30_days FROM SONY_DE.PLATINUM.AGG_FAN_LIFETIME_VALUE WHERE region = 'North America'"
+      },
+      {
+        "sql_text": "SELECT title_id, report_date, total_gross_usd, total_tickets_sold FROM SONY_DE.GOLD.DT_FACT_DAILY_PERFORMANCE WHERE report_date >= DATEADD('month', -3, CURRENT_DATE())"
+      },
+      {
+        "sql_text": "SELECT title_name, franchise, genre, imdb_score, release_year FROM SONY_DE.GOLD.DT_DIM_TITLES WHERE genre = 'Action'"
+      },
+      {
+        "sql_text": "SELECT account_type, region, country_code, lifetime_interactions FROM SONY_DE.GOLD.DT_DIM_FANS WHERE account_type = 'VERIFIED'"
+      }
+    ]
+  },
+  "tables": [
+    {
+      "database": "SONY_DE",
+      "schema": "PLATINUM",
+      "table": "AGG_FRANCHISE_PERFORMANCE",
+      "column_names": ["FRANCHISE", "GENRE", "TITLE_COUNT", "TOTAL_TICKETS", "TOTAL_GROSS_USD", "AVG_TICKET_PRICE", "TOTAL_STREAMS", "TOTAL_UNIQUE_FANS", "FIRST_REPORT_DATE", "LAST_REPORT_DATE", "REFRESHED_AT"]
+    },
+    {
+      "database": "SONY_DE",
+      "schema": "PLATINUM",
+      "table": "AGG_FAN_LIFETIME_VALUE",
+      "column_names": ["REGION", "COUNTRY_CODE", "ACCOUNT_TYPE", "FAN_COUNT", "AVG_INTERACTIONS", "AVG_TITLES_ENGAGED", "AVG_ACTIVE_DAYS", "ACTIVE_LAST_30_DAYS", "ACTIVE_LAST_7_DAYS", "TOP_DEVICE", "REFRESHED_AT"]
+    },
+    {
+      "database": "SONY_DE",
+      "schema": "GOLD",
+      "table": "DT_DIM_FANS",
+      "column_names": ["FAN_KEY", "FAN_ID", "ACCOUNT_TYPE", "EMAIL", "EMAIL_HASH", "FIRST_NAME", "LAST_NAME", "REGION", "COUNTRY_CODE", "SIGNUP_DATE", "LAST_ACTIVE_DATE", "LIFETIME_INTERACTIONS", "TITLES_ENGAGED", "PREFERRED_DEVICE", "EFFECTIVE_FROM", "DBT_UPDATED_AT"]
+    },
+    {
+      "database": "SONY_DE",
+      "schema": "GOLD",
+      "table": "DT_DIM_TITLES",
+      "column_names": ["TITLE_KEY", "TITLE_ID", "TITLE_NAME", "FRANCHISE", "RELEASE_YEAR", "GENRE", "SUB_GENRE", "RATING", "RUNTIME_MINUTES", "IMDB_SCORE", "BUDGET_USD", "PRODUCTION_STATUS", "STUDIO", "DIRECTOR", "DBT_UPDATED_AT"]
+    },
+    {
+      "database": "SONY_DE",
+      "schema": "GOLD",
+      "table": "DT_FACT_DAILY_PERFORMANCE",
+      "column_names": ["PERFORMANCE_KEY", "TITLE_ID", "REPORT_DATE", "REGION", "TOTAL_TICKETS_SOLD", "TOTAL_GROSS_USD", "THEATER_COUNT", "SCREEN_COUNT", "AVG_TICKET_PRICE_USD", "STREAM_COUNT", "UNIQUE_FANS", "DBT_UPDATED_AT"]
+    }
+  ],
+  "metadata": {
+    "warehouse": "COMPUTE_WH"
+  },
+  "extensions": {
+    "semantic_view_db": "SONY_DE",
+    "semantic_view_schema": "ANALYTICS",
+    "semantic_description": "Sony Pictures Entertainment data analytics semantic model covering franchise performance, box office metrics, fan engagement, and title catalog data"
+  }
+}

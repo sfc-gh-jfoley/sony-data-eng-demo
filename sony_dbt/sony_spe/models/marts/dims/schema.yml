@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: dim_fans
+    description: Fan dimension table with SCD Type 1
+    columns:
+      - name: fan_key
+        description: Surrogate key (MD5 hash)
+        tests:
+          - unique
+          - not_null
+      - name: fan_id
+        description: Natural key from source
+        tests:
+          - unique
+          - not_null
+      - name: account_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['VERIFIED', 'GUEST']
+      - name: email_hash
+        description: SHA256 hash of email for PII protection (null for guests without email)
+      - name: country_code
+        tests:
+          - not_null
+
+  - name: dim_titles
+    description: Title/movie dimension table
+    columns:
+      - name: title_key
+        tests:
+          - unique
+          - not_null
+      - name: title_id
+        tests:
+          - unique
+          - not_null
+      - name: title_name
+        tests:
+          - not_null
+      - name: release_year
+        tests:
+          - not_null
+      - name: imdb_score
+        tests:
+          - not_null

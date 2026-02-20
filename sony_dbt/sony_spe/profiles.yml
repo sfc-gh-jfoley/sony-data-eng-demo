@@ -1,0 +1,12 @@
+sony_spe:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: GWB85002
+      user: jfoley
+      role: SYSADMIN
+      warehouse: COMPUTE_WH
+      database: SONY_DE
+      schema: SILVER
+      threads: 4

@@ -1,0 +1,2 @@
+authenticator: programmatic_access_token
+token: "{{ env_var('SNOWFLAKE_PAT') }}"

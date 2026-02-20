@@ -1,0 +1,19 @@
+version: 2
+
+snapshots:
+  - name: snap_dim_fans
+    description: SCD Type 2 history tracking for fan dimension
+    columns:
+      - name: fan_id
+        description: Natural key - unique per fan
+        tests:
+          - not_null
+      - name: dbt_scd_id
+        description: Surrogate key for each version
+        tests:
+          - unique
+          - not_null
+      - name: dbt_valid_from
+        description: Start timestamp of this version
+        tests:
+          - not_null

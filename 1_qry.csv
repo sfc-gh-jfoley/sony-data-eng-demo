@@ -1,0 +1,2 @@
+DESCRIPTION , SQL
+Top 5 franchises by total box office gross, SELECT     franchise,    genre,    title_count,    total_gross_usd,    total_streams FROM SONY_DE.PLATINUM.AGG_FRANCHISE_PERFORMANCE ORDER BY total_gross_usd DESC LIMIT 5;

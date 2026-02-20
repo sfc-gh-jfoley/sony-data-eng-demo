@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: stg_fans_unified
+    description: Unified view of verified and guest fan interactions
+    columns:
+      - name: interaction_id
+        tests:
+          - not_null
+      - name: account_type
+        tests:
+          - accepted_values:
+              values: ['VERIFIED', 'GUEST']
+
+  - name: stg_titles_parsed
+    description: Parsed title metadata from RAW VARIANT
+    columns:
+      - name: title_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_box_office_clean
+    description: Cleaned box office data
+    columns:
+      - name: record_id
+        tests:
+          - not_null
+
+  - name: stg_box_office_dedup
+    description: Deduplicated box office records

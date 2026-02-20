@@ -1,0 +1,24 @@
+version: 2
+
+sources:
+  - name: bronze
+    database: SONY_DE
+    schema: BRONZE
+    tables:
+      - name: raw_fan_interactions
+        description: Raw fan interaction events in VARIANT format
+      - name: raw_title_metadata
+        description: Raw title/movie metadata in VARIANT format
+      - name: raw_box_office
+        description: Raw box office performance data in VARIANT format
+
+  - name: silver
+    database: SONY_DE
+    schema: SILVER
+    tables:
+      - name: stg_fan_verified
+        description: Verified fan interactions (routed by Stream/Task)
+      - name: stg_fan_guest
+        description: Guest fan interactions (routed by Stream/Task)
+      - name: stg_box_office_clean
+        description: Cleaned box office data (populated by Task)
